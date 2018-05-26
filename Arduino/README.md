@@ -1,0 +1,5 @@
+# YSCProject
+
+Arduino Project
+1. Motion control
+2. communicate with Raspberry Pi
