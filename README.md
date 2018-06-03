@@ -17,7 +17,9 @@ YSC-001 目标：
 5. 蜂鸣器，超声波模块
 
 软件模块：
-1. Motion control module (Anduino)
-2. IoT module (Raspberry Pi)
+1. Driver为 YSC的驱动部分，主要是运动控制，io模块的控制。（硬件平台 Arduino）
+2. Server为IoT module (硬件平台：Raspberry Pi)
 3. Web Client (Mobile phone or PC)
 4. PC GUI （PC）
+
+
