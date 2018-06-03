@@ -22,4 +22,9 @@ YSC-001 目标：
 3. Web Client (Mobile phone or PC)
 4. PC GUI （PC）
 
+### Hardware shot
+
+<p align="center">
+  <img src="https://cloud.githubusercontent.com/assets/1175750/8614312/280e5dc2-26f1-11e5-9f1f-5891c3ca8b26.png" alt="Screenshot"/>
+</p>
 
