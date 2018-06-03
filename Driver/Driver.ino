@@ -15,7 +15,7 @@
 #define CMDBUFSIZE 16   // buffer size for receiving serial commands
 
 char cmdBuffer[CMDBUFSIZE];
-int animation = 0;
+int motionCmd= 0;
 float brightness = 0.3;
 int paletteId=0;
 long duration = 5000;
@@ -52,50 +52,68 @@ void loop()
       switch(toupper(cmdBuffer[0]))
       {
       case 'A':
-        animation = atoi(&cmdBuffer[2]);
-        Serial.println("OK");
-        break;
-      case 'B':
-        brightness = atoi(&cmdBuffer[2]);
-        Serial.println("OK");
-        break;
-      case 'C':
-//        color = strtol(&cmdBuffer[2], 0, 16);
-//        palette=alaPalNull;
-        Serial.println("OK");
-        break;
-      case 'D':
-        duration = atol(&cmdBuffer[2]);
-        Serial.println("OK");
-        break;
-      case 'P':
-        paletteId = atoi(&cmdBuffer[2]);
-        switch(paletteId)
-        {
-        case 0:
-          palette=0;
-          break;
-        case 1:
-          palette=1;
-          break;
-        case 2:
-          palette=2;
-          break;
-        case 3:
-          palette=3;
-          break;
-        case 4:
-          palette=4;
-          break;
-        case 5:
-          palette=5;
-          break;
-        case 6:
-          palette=6;
-          break;
+        motionCmd = atoi(&cmdBuffer[2]);
+        switch(motionCmd){
+          case 102://left
+
+            Serial.println("Yellow smart car turn left");
+            break;
+          case 302://right
+            Serial.println("Yellow smart car turn right");
+            break;
+          case 211://up
+            Serial.println("Yellow smart car Motion forward");
+            break;
+          case 213://down
+            Serial.println("Yellow smart car Motion backword");
+            break;
+          default:
+            Serial.println("Error Motion Command");
+            break;
         }
+        
         break;
-      
+//      case 'B':
+//        brightness = atoi(&cmdBuffer[2]);
+//        Serial.println("OK");
+//        break;
+//      case 'C':
+////        color = strtol(&cmdBuffer[2], 0, 16);
+////        palette=alaPalNull;
+//        Serial.println("OK");
+//        break;
+//      case 'D':
+//        duration = atol(&cmdBuffer[2]);
+//        Serial.println("OK");
+//        break;
+//      case 'P':
+//        paletteId = atoi(&cmdBuffer[2]);
+//        switch(paletteId)
+//        {
+//        case 0:
+//          palette=0;
+//          break;
+//        case 1:
+//          palette=1;
+//          break;
+//        case 2:
+//          palette=2;
+//          break;
+//        case 3:
+//          palette=3;
+//          break;
+//        case 4:
+//          palette=4;
+//          break;
+//        case 5:
+//          palette=5;
+//          break;
+//        case 6:
+//          palette=6;
+//          break;
+//        }
+//        break;
+//      
       default:
         Serial.println("KO");
       }
