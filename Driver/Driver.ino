@@ -21,6 +21,16 @@ int paletteId=0;
 long duration = 5000;
 int palette=0;
 
+int IN1=3;    
+int IN2=4;    
+int IN3=5;    
+int IN4=7;
+
+const int trig=9;
+const int echo=10;
+int vcc=8;
+int pinBuzzer = 11; //管脚D3连接到蜂鸣器模块的信号脚  
+
 void setup()
 {
   Serial.begin(9600);
@@ -31,11 +41,21 @@ void setup()
   Serial.println("D=[duration]       Set the duration in milliseconds of the animation cycle");
   Serial.println("C=[color]          Set the color (hexadecimal RGB representation ex. 0xE8A240)");
   Serial.println("P=[palette]        Set the palette.");
+  //driver
+  pinMode(IN1,OUTPUT);
+  pinMode(IN2,OUTPUT);
+  pinMode(IN3,OUTPUT);
+  pinMode(IN4,OUTPUT);
+  //Alarm system
+  pinMode(echo,INPUT);
+  pinMode(trig,OUTPUT);
+  pinMode(pinBuzzer, OUTPUT); //设置pinBuzzer脚为输出状态  
+  pinMode(vcc,OUTPUT);
 }
 
 void loop()
 {
-
+  Alarm();
   if (Serial.available())
   {
     int charsRead;
@@ -55,16 +75,19 @@ void loop()
         motionCmd = atoi(&cmdBuffer[2]);
         switch(motionCmd){
           case 102://left
-
+            TurnLeft();
             Serial.println("Yellow smart car turn left");
             break;
           case 302://right
+            TurnRight();
             Serial.println("Yellow smart car turn right");
             break;
           case 211://up
+            Forward();
             Serial.println("Yellow smart car Motion forward");
             break;
           case 213://down
+            Backward();
             Serial.println("Yellow smart car Motion backword");
             break;
           default:
@@ -119,6 +142,71 @@ void loop()
       }
   }
 }
+}
+
+
+
+void Forward(){
+  digitalWrite(IN1,HIGH);
+  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,HIGH);
+  digitalWrite(IN4,LOW);
+}
+
+void Backward(){
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,HIGH);
+}
+
+void TurnLeft(){
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
+  digitalWrite(IN3,HIGH);
+  digitalWrite(IN4,LOW);
+}
+
+void TurnRight(){
+  digitalWrite(IN1,HIGH);
+  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,HIGH);
+}
+
+void Alarm(){
+  digitalWrite(vcc,HIGH);
+  float instantDistance=distance();
+  buzzer(instantDistance);
+}
+
+void buzzer(float instantDistance){
+  
+   long frequency = 500; //频率, 单位Hz  
+   long dur=instantDistaqnce*5;
+   if(instantDistance<20.00){
+      breaktime = int(instantDistance);
+      //用tone()函数发出频率为frequency的波形  
+      tone(pinBuzzer, frequency,dur);  
+      delay(dur); //等待1000毫秒  
+      noTone(pinBuzzer);//停止发声  
+   }else;  
+}
+
+float distance(){
+  long IntervalTime=0;
+  digitalWrite(trig,1);
+  delayMicroseconds(15);
+  digitalWrite(trig,0);
+  IntervalTime=pulseIn(echo,HIGH);
+  float S=IntervalTime/58.00;
+  if(S<3300.00){
+    Serial.println(S);
+    float instantDistance = S;
+    S=0;
+    delay(50);
+    return instantDistance;
+  }else;
 }
 
 
