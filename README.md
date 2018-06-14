@@ -28,33 +28,3 @@ YSC-001 目标：
   <img src="https://github.com/SailCPU/YSCProject/blob/master/Hardware/YSCar-001.jpg" alt="Screenshot"/>
 </p>
 
-
-* CPolish
-  * 技术
-    * RobotDriver
-      * Motoman
-        * FS100(已经实现)
-        * DX200
-      * UR
-        * UR3
-        * UR5
-        * UR10
-    * FTSenor
-      * Optoforce
-      * ATI
-      * DynPick
-    * CAM
-      * VTK
-      * OpenCASCADE
-    * 力控算法
-      * 实现方法
-        * Model-based Design
-        * [MIT drake](https://drake.mit.edu/)
-      * 理论知识
-      * 力控拖动
-      * 力控打磨
-      * 力控装配
-    * 3D重构
-    * Robotics
-      * DH参数
-      * 运动学
