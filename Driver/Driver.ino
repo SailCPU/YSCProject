@@ -26,6 +26,8 @@ int IN2=4;
 int IN3=5;    
 int IN4=7;
 
+int isStart=1;
+
 const int trig=9;
 const int echo=10;
 int vcc=8;
@@ -90,6 +92,9 @@ void loop()
             Backward();
             Serial.println("Yellow smart car Motion backword");
             break;
+          case 212://start/stop
+            isStart=!isStart;
+            break;            
           default:
             Serial.println("Error Motion Command");
             break;
@@ -147,32 +152,57 @@ void loop()
 
 
 void Forward(){
+  if(isStart){
   digitalWrite(IN1,HIGH);
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,HIGH);
   digitalWrite(IN4,LOW);
+  }else{
+    Stop();
+  }
 }
 
 void Backward(){
+  if(isStart){
   digitalWrite(IN1,LOW);
   digitalWrite(IN2,HIGH);
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,HIGH);
+  }else{
+    Stop();
+  }
 }
 
 void TurnLeft(){
+  if(isStart){
   digitalWrite(IN1,LOW);
   digitalWrite(IN2,HIGH);
   digitalWrite(IN3,HIGH);
   digitalWrite(IN4,LOW);
+  }else{
+    Stop();
+  }
 }
 
 void TurnRight(){
+  if(isStart){
   digitalWrite(IN1,HIGH);
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,HIGH);
+  }else{
+    Stop();
+  }
 }
+
+void Stop(){
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,LOW);
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,LOW);
+}
+
+
 
 void Alarm(){
   digitalWrite(vcc,HIGH);
@@ -180,12 +210,13 @@ void Alarm(){
   buzzer(instantDistance);
 }
 
+
+
 void buzzer(float instantDistance){
   
    long frequency = 500; //频率, 单位Hz  
-   long dur=instantDistaqnce*5;
+   long dur=instantDistance*5;
    if(instantDistance<20.00){
-      breaktime = int(instantDistance);
       //用tone()函数发出频率为frequency的波形  
       tone(pinBuzzer, frequency,dur);  
       delay(dur); //等待1000毫秒  
