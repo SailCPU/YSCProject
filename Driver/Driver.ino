@@ -157,8 +157,8 @@ void MotionService(int speed){
 void TurnRight(int speed){
   if(speed!=1||2||3){
     speed=3;
-  }
-  int Vollevel=(HIGH/3)*speed;
+  }else;
+  int Vollevel=int((HIGH/3)*speed);
   digitalWrite(IN1,Vollevel);
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,Vollevel);
@@ -172,8 +172,8 @@ void TurnRight(int speed){
 void TurnLeft(int speed){
   if(speed!=1||2||3){
     speed=3;
-  }
-  int Vollevel=(HIGH/3)*speed;
+  }else;
+  int Vollevel=int((HIGH/3)*speed);
   digitalWrite(IN1,LOW);
   digitalWrite(IN2,Vollevel);
   digitalWrite(IN3,LOW);
@@ -187,8 +187,8 @@ void TurnLeft(int speed){
 void Forward(int speed){
   if(speed!=1||2||3){
     speed=3;
-  }
-  int Vollevel=(HIGH/3)*speed;
+  }else;
+  int Vollevel=int((HIGH/3)*speed);
   digitalWrite(IN1,LOW);
   digitalWrite(IN2,Vollevel);
   digitalWrite(IN3,Vollevel);
@@ -202,8 +202,8 @@ void Forward(int speed){
 void Backward(int speed){
   if(speed!=1||2||3){
     speed=3;
-  }
-  int Vollevel=(HIGH/3)*speed;
+  }else;
+  int Vollevel=int((HIGH/3)*speed);
   digitalWrite(IN1,Vollevel);
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,LOW);
