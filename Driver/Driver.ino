@@ -226,13 +226,11 @@ void Stop(){
 }
 
 
-
 void Alarm(){
   digitalWrite(vcc,HIGH);
   float instantDistance=distance();
   buzzer(instantDistance);
 }
-
 
 
 void buzzer(float instantDistance){
