@@ -20,7 +20,7 @@ float brightness = 0.3;
 int paletteId=0;
 long duration = 5000;
 int palette=0;
-int speed=1;
+int speed=3;
 
 int IN1=3;    
 int IN2=4;    
