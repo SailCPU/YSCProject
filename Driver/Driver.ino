@@ -155,7 +155,6 @@ void MotionService(int speed){
 
 
 void TurnRight(int speed){
-
   if(speed!=1||2||3){
     speed=3;
   }
