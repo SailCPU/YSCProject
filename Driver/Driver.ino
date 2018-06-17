@@ -15,18 +15,17 @@
 #define CMDBUFSIZE 16   // buffer size for receiving serial commands
 
 char cmdBuffer[CMDBUFSIZE];
-int motionCmd= 0;
+int motionCmd= 212;
 float brightness = 0.3;
 int paletteId=0;
 long duration = 5000;
 int palette=0;
+int speed=1;
 
 int IN1=3;    
 int IN2=4;    
 int IN3=5;    
 int IN4=7;
-
-int isStart=1;
 
 const int trig=9;
 const int echo=10;
@@ -40,7 +39,7 @@ void setup()
   Serial.println("Welcome to ALA RgbStripSerial example");
   Serial.println("A=[animation code] Set the animation. See https://github.com/bportaluri/ALA/blob/master/src/AlaLed.h");
   Serial.println("B=[brightness]     Set the brightness [0-100]");
-  Serial.println("D=[duration]       Set the duration in milliseconds of the animation cycle");
+  Serial.println("D=[speed]       Set the duration in milliseconds of the animation cycle");
   Serial.println("C=[color]          Set the color (hexadecimal RGB representation ex. 0xE8A240)");
   Serial.println("P=[palette]        Set the palette.");
   //driver
@@ -51,7 +50,7 @@ void setup()
   //Alarm system
   pinMode(echo,INPUT);
   pinMode(trig,OUTPUT);
-  pinMode(pinBuzzer, OUTPUT); //设置pinBuzzer脚为输出状态  
+  pinMode(pinBuzzer, OUTPUT); //设置pinBuzzer脚为输出状态
   pinMode(vcc,OUTPUT);
 }
 
@@ -64,7 +63,7 @@ void loop()
     charsRead = Serial.readBytesUntil('\n', cmdBuffer, sizeof(cmdBuffer) - 1);  //read entire line
     cmdBuffer[charsRead] = '\0';       // Make it a C string
     Serial.print("Sail >"); Serial.println(cmdBuffer);
-    
+
     if(cmdBuffer[1] != '=' || strlen(cmdBuffer)<3)
     {
       Serial.println("KO");
@@ -75,31 +74,6 @@ void loop()
       {
       case 'A':
         motionCmd = atoi(&cmdBuffer[2]);
-        switch(motionCmd){
-          case 102://left
-            TurnLeft();
-            Serial.println("Yellow smart car turn left");
-            break;
-          case 302://right
-            TurnRight();
-            Serial.println("Yellow smart car turn right");
-            break;
-          case 211://up
-            Forward();
-            Serial.println("Yellow smart car Motion forward");
-            break;
-          case 213://down
-            Backward();
-            Serial.println("Yellow smart car Motion backword");
-            break;
-          case 212://start/stop
-            isStart=!isStart;
-            break;            
-          default:
-            Serial.println("Error Motion Command");
-            break;
-        }
-        
         break;
 //      case 'B':
 //        brightness = atoi(&cmdBuffer[2]);
@@ -110,10 +84,10 @@ void loop()
 ////        palette=alaPalNull;
 //        Serial.println("OK");
 //        break;
-//      case 'D':
-//        duration = atol(&cmdBuffer[2]);
-//        Serial.println("OK");
-//        break;
+      case 'D':
+        speed = atol(&cmdBuffer[2]);
+        Serial.println("OK");
+        break;
 //      case 'P':
 //        paletteId = atoi(&cmdBuffer[2]);
 //        switch(paletteId)
@@ -141,58 +115,104 @@ void loop()
 //          break;
 //        }
 //        break;
-//      
+//
       default:
         Serial.println("KO");
       }
   }
 }
+speed=int(speed);
+MotionService(speed);
+}
+bool isStart=true;
+int lastCmd=211;
+void MotionService(int speed){
+        switch(motionCmd){
+          case 102://left
+            TurnLeft(speed);
+            break;
+          case 302://right
+            TurnRight(speed);
+            break;
+          case 211://up
+            Forward(speed);
+            break;
+          case 213://down
+            Backward(speed);
+            break;
+          case 212://start/stop
+            if(isStart){
+              Stop();
+            }else{
+              motionCmd=lastCmd;
+            }
+            break;
+          default:
+            break;
+        }
+
 }
 
 
+void TurnRight(int speed){
 
-void Forward(){
-  if(isStart){
-  digitalWrite(IN1,HIGH);
+  if(speed!=1||2||3){
+    speed=3;
+  }
+  int Vollevel=(HIGH/3)*speed;
+  digitalWrite(IN1,Vollevel);
   digitalWrite(IN2,LOW);
-  digitalWrite(IN3,HIGH);
+  digitalWrite(IN3,Vollevel);
   digitalWrite(IN4,LOW);
-  }else{
-    Stop();
-  }
+  isStart=true;
+  lastCmd=motionCmd;
+  motionCmd=0;
+  Serial.println("Yellow smart car turn left");
 }
 
-void Backward(){
-  if(isStart){
+void TurnLeft(int speed){
+  if(speed!=1||2||3){
+    speed=3;
+  }
+  int Vollevel=(HIGH/3)*speed;
   digitalWrite(IN1,LOW);
-  digitalWrite(IN2,HIGH);
+  digitalWrite(IN2,Vollevel);
   digitalWrite(IN3,LOW);
-  digitalWrite(IN4,HIGH);
-  }else{
-    Stop();
-  }
+  digitalWrite(IN4,Vollevel);
+    isStart=true;
+  lastCmd=motionCmd;
+  motionCmd=0;
+  Serial.println("Yellow smart car turn right");
 }
 
-void TurnLeft(){
-  if(isStart){
+void Forward(int speed){
+  if(speed!=1||2||3){
+    speed=3;
+  }
+  int Vollevel=(HIGH/3)*speed;
   digitalWrite(IN1,LOW);
-  digitalWrite(IN2,HIGH);
-  digitalWrite(IN3,HIGH);
+  digitalWrite(IN2,Vollevel);
+  digitalWrite(IN3,Vollevel);
   digitalWrite(IN4,LOW);
-  }else{
-    Stop();
-  }
+    isStart=true;
+  lastCmd=motionCmd;
+  motionCmd=0;
+  Serial.println("Yellow smart car Motion forward");
 }
 
-void TurnRight(){
-  if(isStart){
-  digitalWrite(IN1,HIGH);
+void Backward(int speed){
+  if(speed!=1||2||3){
+    speed=3;
+  }
+  int Vollevel=(HIGH/3)*speed;
+  digitalWrite(IN1,Vollevel);
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,LOW);
-  digitalWrite(IN4,HIGH);
-  }else{
-    Stop();
-  }
+  digitalWrite(IN4,Vollevel);
+    isStart=true;
+  lastCmd=motionCmd;
+  motionCmd=0;
+  Serial.println("Yellow smart car Motion backword");
 }
 
 void Stop(){
@@ -200,6 +220,9 @@ void Stop(){
   digitalWrite(IN2,LOW);
   digitalWrite(IN3,LOW);
   digitalWrite(IN4,LOW);
+  isStart=false;
+  motionCmd=0;
+  Serial.println("Yellow smart car stoped");
 }
 
 

@@ -28,11 +28,11 @@ def brightness():
     templateData = {}
     return render_template('main.html', **templateData);
 
-@app.route("/duration/", methods=['POST'])
-def duration():
-    duration = request.form['duration']
-    print ("Duration:", duration)
-    arduino_send_cmd("D="+str(duration))
+@app.route("/speed/", methods=['POST'])
+def speed():
+    speed = request.form['speed']
+    print ("Speed:", speed)
+    arduino_send_cmd("D="+str(speed))
     templateData = {}
     return render_template('main.html', **templateData);
 
